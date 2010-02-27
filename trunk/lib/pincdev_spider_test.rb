@@ -1,7 +1,8 @@
 # PincdevSpiderTest
 
 # This module spiders a rails app starting from / or from a list of start points.
-# It depends on the responsible_markup gem.
+# It depends on the responsible_markup plugin:
+# http://blog.codahale.com/2006/03/05/responsiblemarkup-v01-unit-test-your-way-to-responsible-markup/.
 #
 # Author::    Nick Roosevelt (mailto:nroose@thepinc.com)
 # Copyright:: Copyright (c) 2010 PINC Solutions, Inc. (www.pincsolutions.com)
