@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>model_methods_test (PincdevModelMethodsTest)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/pincdev_model_methods_test.rb, line 27</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">model_methods_test</span>(<span class="ruby-identifier">opts_in</span>)
+    <span class="ruby-identifier">opts</span> = {
+      <span class="ruby-identifier">:verbose</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>,
+      <span class="ruby-identifier">:exclude</span> =<span class="ruby-operator">&gt;</span> []
+    }.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts_in</span>)
+    <span class="ruby-identifier">exclude</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:exclude</span>] <span class="ruby-operator">+</span> [<span class="ruby-value str">''</span>]
+    <span class="ruby-identifier">verbose</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:verbose</span>]
+    
+    <span class="ruby-comment cmt"># get list of methods</span>
+    <span class="ruby-identifier">class_methods</span> = <span class="ruby-node">`ruby -pe 'next if not /^[^#]*def [A-Z][^.]*\.[^(\s]*\s*$/' #{RAILS_ROOT}/app/models/*.rb | awk '{print $2}'`</span>
+
+    <span class="ruby-comment cmt"># call them</span>
+    <span class="ruby-identifier">class_methods</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">class_method</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">class_method</span>.<span class="ruby-identifier">chomp!</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">exclude</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">class_method</span>)
+        <span class="ruby-identifier">puts</span> <span class="ruby-identifier">class_method</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">verbose</span>
+        <span class="ruby-identifier">eval</span> <span class="ruby-identifier">class_method</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>
