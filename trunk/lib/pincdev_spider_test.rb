@@ -1,6 +1,46 @@
 # PincdevSpiderTest
+
+# This module spiders a rails app starting from / or from a list of start points.
+# It depends on the responsible_markup gem.
+#
+# Author::    Nick Roosevelt (mailto:nroose@thepinc.com)
+# Copyright:: Copyright (c) 2010 PINC Solutions, Inc. (www.pincsolutions.com)
+# License::   Distributes under the same terms as Ruby
+#
+# invoke it by having an integration test something like:
+# 
+#   require File.dirname(__FILE__) + '/../test_helper'
+#
+#   class SpiderTest < ActionController::IntegrationTest
+#     include PincdevSpiderTest
+#
+#     fixtures :users, :customers, :products
+#
+#     def test_spider
+#       post '/account/login', "user_login"=>"bob", "user_password"=>"test"
+#
+#       body_gsubs = {
+#         /<embed[^>]*>/ => "",
+#       }
+#
+#       spider_test(:body_gsubs => body_gsubs)
+#
+#     end
+#
+#   end
+# 
 module PincdevSpiderTest
 
+  # Run the spider test.  Optional parameters (with their default values):
+  #       :start => "/"   (This can be a single page or an array of pages.)
+  #       :verbose => false
+  #       :show_source => true
+  #       :body_gsubs => {}  (This is a hash that has key/value pairs of the form <search regex> => <replace string>. 
+  #                           For example, you can remove all the embed tags by setting this to {/<embed[^>]*>/ => ""}
+  #       :repeated_id_list => []  (This is in case you have repeated ids in your html elements that you do not care about)
+  #       :exclude_regex => Regexp.union(/^[^\/]/,/logout/,/\/javascripts/,/\/stylesheets/)  (Pages that match this regular expression will not be visited.)
+  #       :skip_validation => /skip_validation/  (Pages that match this regular expression will be visited, but not validated.)
+  #       :limit => 1000  (Maximum number of pages visited for each start point)
   def spider_test(opts_in = {})
     opts = {
       :start => "/",
@@ -78,7 +118,7 @@ module PincdevSpiderTest
     assert_equal 0, num_errors, "#{num_errors} Errors or Failures in the spider test.  NOTE: If you are looking at this in CruiseControl.rb you need to look in the build log for the error detail."
   end
      
-
+  private
   def extract_links(link_array, link_sources, body, regex, link)
     adds = 0
     matches = @response.body.scan(/href=\"([^"]*)\"/) do |m|

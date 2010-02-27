@@ -1,6 +1,29 @@
 # PincdevModelMethodsTest
+
+# This module runs all model class methods in a rails app that do not have parameters
+#
+# Author::    Nick Roosevelt (mailto:nroose@thepinc.com)
+# Copyright:: Copyright (c) 2010 PINC Solutions, Inc. (www.pincsolutions.com)
+# License::   Distributes under the same terms as Ruby
+#
+# invoke it by having an integration test something like:
+# 
+#   require File.dirname(__FILE__) + '/../test_helper'
+#
+#   class ModelMethodsTest < Test::Unit::TestCase
+#     include PincdevModelMethodsTest
+#     fixtures :users, :customers, :products
+#
+#     def test_class_methods
+#       model_methods_test()
+#     end
+#                
+#   end
 module PincdevModelMethodsTest
 
+  # Run the model methods test.  Optional parameters (with their default values):
+  #       :verbose => false
+  #       :exclude => []  (This is an array of names of methods to exclude, for example: ["Customer.exclude_me"].
   def model_methods_test(opts_in)
     opts = {
       :verbose => false,

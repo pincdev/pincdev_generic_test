@@ -1,6 +1,34 @@
 # PincdevValidationsTest
+
+# This module tests the validity of model data.
+#
+# Author::    Nick Roosevelt (mailto:nroose@thepinc.com)
+# Copyright:: Copyright (c) 2010 PINC Solutions, Inc. (www.pincsolutions.com)
+# License::   Distributes under the same terms as Ruby
+#
+# invoke it by having an integration test something like:
+#
+#   require File.dirname(__FILE__) + '/../test_helper'
+#
+#   class ValidationsTest < ActionController::IntegrationTest
+#     include PincdevValidationsTest
+#
+#     fixtures :users, :customers, :products
+#
+#     def test_all_validations
+#       validations_test()
+#     end
+#   end
+#
 module PincdevValidationsTest
 
+  # Run the validations test
+  # Optional Parameters (with their default values):
+  #       :verbose => false
+  #       :exclude => /exclude_me/  (This regular expression prevents validation of models that match the expression.)
+  #       :limit => 10000  (This limits the number of instances of each model that will be validated.
+  #                         The instances validated will be chosen randomly.)
+  #
   def validations_test(opts_in = {})
     opts = {
       :verbose => false,
@@ -41,7 +69,7 @@ module PincdevValidationsTest
           if table_exists
             objs = Kernel.const_get(class_name).find(:all, :limit => limit, :order => "random()")
             puts "#{class_name}: #{objs.length}" if verbose
-            objs.each{|o| error_list << "Invalid fixture #{class_name} (#{o.id}): #{o.errors.full_messages}" if !o.valid?}
+            objs.each{|o| error_list << "Invalid object #{class_name} (#{o.id}): #{o.errors.full_messages} - #{o.inspect}" if !o.valid?}
           else
             error_list << "No table for #{class_name}"
           end
