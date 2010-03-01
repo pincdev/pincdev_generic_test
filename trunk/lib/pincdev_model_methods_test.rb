@@ -24,7 +24,7 @@ module PincdevModelMethodsTest
   # Run the model methods test.  Optional parameters (with their default values):
   #       :verbose => false
   #       :exclude => []  (This is an array of names of methods to exclude, for example: ["Customer.exclude_me"].
-  def model_methods_test(opts_in)
+  def model_methods_test(opts_in = {})
     opts = {
       :verbose => false,
       :exclude => []
