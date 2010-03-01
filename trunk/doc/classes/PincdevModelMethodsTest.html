@@ -141,9 +141,8 @@ invoke it by having an integration test something like:
         <a name="M000002"></a>
 
         <div class="method-heading">
-          <a href="PincdevModelMethodsTest.src/M000002.html" target="Code" class="method-signature"
-            onclick="popupCode('PincdevModelMethodsTest.src/M000002.html');return false;">
-          <span class="method-name">model_methods_test</span><span class="method-args">(opts_in)</span>
+          <a href="#M000002" class="method-signature">
+          <span class="method-name">model_methods_test</span><span class="method-args">(opts_in = {})</span>
           </a>
         </div>
       
@@ -156,6 +155,34 @@ values):
       :verbose =&gt; false
       :exclude =&gt; []  (This is an array of names of methods to exclude, for example: [&quot;Customer.exclude_me&quot;].
 </pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000002-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000002-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/pincdev_model_methods_test.rb, line 27</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">model_methods_test</span>(<span class="ruby-identifier">opts_in</span> = {})
+    <span class="ruby-identifier">opts</span> = {
+      <span class="ruby-identifier">:verbose</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">false</span>,
+      <span class="ruby-identifier">:exclude</span> =<span class="ruby-operator">&gt;</span> []
+    }.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts_in</span>)
+    <span class="ruby-identifier">exclude</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:exclude</span>] <span class="ruby-operator">+</span> [<span class="ruby-value str">''</span>]
+    <span class="ruby-identifier">verbose</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:verbose</span>]
+    
+    <span class="ruby-comment cmt"># get list of methods</span>
+    <span class="ruby-identifier">class_methods</span> = <span class="ruby-node">`ruby -pe 'next if not /^[^#]*def [A-Z][^.]*\.[^(\s]*\s*$/' #{RAILS_ROOT}/app/models/*.rb | awk '{print $2}'`</span>
+
+    <span class="ruby-comment cmt"># call them</span>
+    <span class="ruby-identifier">class_methods</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">class_method</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">class_method</span>.<span class="ruby-identifier">chomp!</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">exclude</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">class_method</span>)
+        <span class="ruby-identifier">puts</span> <span class="ruby-identifier">class_method</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">verbose</span>
+        <span class="ruby-identifier">eval</span> <span class="ruby-identifier">class_method</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
         </div>
       </div>
 

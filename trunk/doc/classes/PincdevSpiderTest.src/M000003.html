@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File lib/pincdev_spider_test.rb, line 44</span>
+  <pre><span class="ruby-comment cmt"># File lib/pincdev_spider_test.rb, line 46</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">spider_test</span>(<span class="ruby-identifier">opts_in</span> = {})
     <span class="ruby-identifier">opts</span> = {
       <span class="ruby-identifier">:start</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;/&quot;</span>,
@@ -20,6 +20,7 @@
       <span class="ruby-identifier">:repeated_id_list</span> =<span class="ruby-operator">&gt;</span> [],
       <span class="ruby-identifier">:exclude_regex</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">union</span>(<span class="ruby-regexp re">/^[^\/]/</span>,<span class="ruby-regexp re">/logout/</span>,<span class="ruby-regexp re">/\/javascripts/</span>,<span class="ruby-regexp re">/\/stylesheets/</span>),
       <span class="ruby-identifier">:skip_validation</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-regexp re">/skip_validation/</span>,
+      <span class="ruby-identifier">:max_errors</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">10</span>,
       <span class="ruby-identifier">:limit</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">1000</span>
     }.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts_in</span>)
 
@@ -33,6 +34,7 @@
     <span class="ruby-identifier">repeated_id_list</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:repeated_id_list</span>]
     <span class="ruby-identifier">limit</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:limit</span>]
     <span class="ruby-identifier">skip_validation</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:skip_validation</span>]
+    <span class="ruby-identifier">max_errors</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:max_errors</span>]
 
     <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">sync</span> = <span class="ruby-keyword kw">true</span>
     <span class="ruby-identifier">current</span> = <span class="ruby-value">0</span>
@@ -82,8 +84,8 @@
         <span class="ruby-identifier">$!</span>.<span class="ruby-identifier">backtrace</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">b</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ex_str</span> <span class="ruby-operator">+=</span> <span class="ruby-value str">&quot;   &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">b</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\n&quot;</span>}
         <span class="ruby-identifier">puts</span> <span class="ruby-identifier">ex_str</span>
       <span class="ruby-keyword kw">end</span>
-      <span class="ruby-identifier">assert_operator</span> <span class="ruby-value">10</span>, <span class="ruby-identifier">:&gt;</span>, <span class="ruby-identifier">num_errors</span>, <span class="ruby-node">&quot;#{num_errors} Errors or Failures in the spider test.  &quot;</span> <span class="ruby-operator">+</span> 
-        <span class="ruby-value str">&quot;NOTE: This error just exists to make the test stop after 10 errors, rather than keep going.&quot;</span>
+      <span class="ruby-identifier">assert_operator</span> <span class="ruby-identifier">max_errors</span>, <span class="ruby-identifier">:&gt;</span>, <span class="ruby-identifier">num_errors</span>, <span class="ruby-node">&quot;#{num_errors} Errors or Failures in the spider test.  &quot;</span> <span class="ruby-operator">+</span> 
+        <span class="ruby-node">&quot;NOTE: This error just exists to make the test stop after #{max_errors} errors, rather than keep going.&quot;</span>
     <span class="ruby-keyword kw">end</span>
     <span class="ruby-identifier">assert_equal</span> <span class="ruby-value">0</span>, <span class="ruby-identifier">num_errors</span>, <span class="ruby-node">&quot;#{num_errors} Errors or Failures in the spider test.  NOTE: If you are looking at this in CruiseControl.rb you need to look in the build log for the error detail.&quot;</span>
   <span class="ruby-keyword kw">end</span></pre>

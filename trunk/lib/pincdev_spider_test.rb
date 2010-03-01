@@ -42,6 +42,7 @@ module PincdevSpiderTest
   #       :exclude_regex => Regexp.union(/^[^\/]/,/logout/,/\/javascripts/,/\/stylesheets/)  (Pages that match this regular expression will not be visited.)
   #       :skip_validation => /skip_validation/  (Pages that match this regular expression will be visited, but not validated.)
   #       :limit => 1000  (Maximum number of pages visited for each start point)
+  #       :max_errors => 10   (Maximum number of errors before the test stops spidering.)
   def spider_test(opts_in = {})
     opts = {
       :start => "/",
@@ -51,6 +52,7 @@ module PincdevSpiderTest
       :repeated_id_list => [],
       :exclude_regex => Regexp.union(/^[^\/]/,/logout/,/\/javascripts/,/\/stylesheets/),
       :skip_validation => /skip_validation/,
+      :max_errors => 10,
       :limit => 1000
     }.merge(opts_in)
 
@@ -64,6 +66,7 @@ module PincdevSpiderTest
     repeated_id_list = opts[:repeated_id_list]
     limit = opts[:limit]
     skip_validation = opts[:skip_validation]
+    max_errors = opts[:max_errors]
 
     STDOUT.sync = true
     current = 0
@@ -113,8 +116,8 @@ module PincdevSpiderTest
         $!.backtrace.each{|b| ex_str += "   " + b + "\n"}
         puts ex_str
       end
-      assert_operator 10, :>, num_errors, "#{num_errors} Errors or Failures in the spider test.  " + 
-        "NOTE: This error just exists to make the test stop after 10 errors, rather than keep going."
+      assert_operator max_errors, :>, num_errors, "#{num_errors} Errors or Failures in the spider test.  " + 
+        "NOTE: This error just exists to make the test stop after #{max_errors} errors, rather than keep going."
     end
     assert_equal 0, num_errors, "#{num_errors} Errors or Failures in the spider test.  NOTE: If you are looking at this in CruiseControl.rb you need to look in the build log for the error detail."
   end
